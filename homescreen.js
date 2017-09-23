@@ -10,22 +10,25 @@ import { TouchableOpacity, AppRegistry, StyleSheet, Text, TextInput, View } from
 export default class HomeScreen extends Component {
   static navigationOptions = {
     title: 'Home',
+    header: null,
   };
 
     render() {  
-      const { navigate } = this.props.navigation;
+      const { navigate } = this.props.navigation
+    const { params } = this.props.navigation.state
+    console.log('BLABLA ' + params.user)
     return (
       <View style={styles.container}>
         <TextInput
           style={{height: 40}}
-          placeholder="הכנס מספר טלפון של נותן השירות"
+          placeholder="הכנס מספר טלפון של נותן השירות" 
           onChangeText={(phoneNumber) => this.setState({phoneNumber})}
         />
 
         <TouchableOpacity
            style = {styles.submitButton}
            onPress = {
-                () => navigate('Results', {phoneNumber: this.state.phoneNumber})
+                () => navigate('Results', {user: params.user})
            }>
            <Text style = {styles.submitButtonText}> שלח </Text>
         </TouchableOpacity>

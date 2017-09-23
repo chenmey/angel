@@ -24,6 +24,8 @@ export default class ResultsScreen extends Component {
   };
     
 render() {
+    const { params } = this.props.navigation.state;
+    console.log('BLABLA ' + JSON.stringify(params.user))
     if (this.state.isLoading) {
       return (
         <View style={{flex: 1, paddingTop: 20}}>
@@ -33,12 +35,11 @@ render() {
     }
 
     return (
-      <View style={{flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',}}>
+      <View>
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => <ResultEntry title={rowData.title} year={rowData.releaseYear}></ResultEntry>}
+//          renderRow={(rowData) => <ResultEntry title={rowData.title} year={rowData.releaseYear}></ResultEntry>}
+          renderRow={(rowData) => <ResultEntry title={params.user.name} year={rowData.releaseYear}></ResultEntry>}
         />
       </View>
     );
