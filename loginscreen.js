@@ -36,7 +36,7 @@ async checkIfLoggedIn () {
       
     AccessToken.getCurrentAccessToken().then(
             (data) => {
-                if (data.hasOwnProperty('expirationTime') && data.expirationTime == null) {
+                if (data.hasOwnProperty('expirationTime') && data.expirationTime != null) {
                     let now = new Date();
                     if (data.expirationTime - now > 0) {
                         this.setState({
