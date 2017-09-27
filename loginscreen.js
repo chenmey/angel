@@ -13,8 +13,6 @@ import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 're
 export default class LoginScreen extends Component {
     static navigationOptions = {
         header: null,
-        header: null,
-        header: null,
     };
 
   constructor(props) {
