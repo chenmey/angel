@@ -13,6 +13,8 @@ import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 're
 export default class LoginScreen extends Component {
     static navigationOptions = {
         header: null,
+        header: null,
+        header: null,
     };
 
   constructor(props) {
@@ -26,14 +28,14 @@ export default class LoginScreen extends Component {
 
 
 async checkIfLoggedIn () {
-    
+
     const { navigate } = this.props.navigation
     let val = await  AsyncStorage.getItem("user");
-    
+
     if (val != null) {
         this.setState({user: val});
     }
-      
+
     AccessToken.getCurrentAccessToken().then(
             (data) => {
                 if (data.hasOwnProperty('expirationTime') && data.expirationTime != null) {
@@ -61,15 +63,15 @@ async checkIfLoggedIn () {
                 }
             }
     );
-    
-    
+
+
 }
 
   componentDidMount() {
       this.checkIfLoggedIn();
-   
+
   }
-    
+
 
 
 
@@ -88,7 +90,7 @@ handleFacebookLogin (navigate) {
         if (result.isCancelled) {
           console.log('Login cancelled')
         } else {
-            
+
            let req = new GraphRequest('/me', {
                 httpMethod: 'GET',
                 version: 'v2.5',
@@ -100,11 +102,11 @@ handleFacebookLogin (navigate) {
             }, (err, res) => {
                 this.initUser(res)
                 navigate('Home', {user: this.state.user})
-            });  
-            
+            });
+
             new GraphRequestManager().addRequest(req).start();
-            
-            
+
+
         }
       }.bind(this),
       function (error) {
@@ -113,7 +115,7 @@ handleFacebookLogin (navigate) {
     )
   }
 
-    render() {  
+    render() {
     const { navigate } = this.props.navigation;
     if (this.state.isLoading) {
       return (
@@ -122,10 +124,10 @@ handleFacebookLogin (navigate) {
         </View>
       );
     }
-    
+
 
     return (
-                    
+
         <View style={styles.container}>
             <View style={styles.logoContainer}>
                 <Image
@@ -136,7 +138,7 @@ handleFacebookLogin (navigate) {
                 <Text style={styles.description}>משתפים מידע אודות בעלי מקצוע</Text>
             </View>
             <View style={styles.loginContainer}>
-               <TouchableOpacity 
+               <TouchableOpacity
                     onPress={() => this.handleFacebookLogin(navigate)}
                     style={styles.fbButton}
                     >
@@ -146,7 +148,7 @@ handleFacebookLogin (navigate) {
             </View>
         </View>
 
-        
+
 
 
     );
@@ -192,13 +194,13 @@ const styles = StyleSheet.create({
    },
    fbButton: {
       flexDirection: 'row',
-      marginTop: 40,  
+      marginTop: 40,
       backgroundColor: '#4267B2',
       paddingVertical: 15,
       paddingLeft: 20,
       paddingRight: 20,
-       
-      
+
+
    },
    fbButtonText:{
       color: 'white',
