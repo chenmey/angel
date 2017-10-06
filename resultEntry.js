@@ -5,8 +5,8 @@ export default class ResultEntry extends Component {
   render() {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{this.props.title}</Text>
-            <Text style={styles.year}>{this.props.year}</Text>
+            <Text style={styles.title}>{this.props.stars}</Text>
+            <Text style={styles.year}>{this.props.text}</Text>
         </View>
     );
   }
@@ -20,12 +20,12 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 
-  title: {
+  stars: {
     color: 'blue',
     fontWeight: 'bold',
     fontSize: 30,
   },
-  year: {
+  text: {
     color: 'red',
   },
 });

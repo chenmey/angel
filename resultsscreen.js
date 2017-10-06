@@ -22,10 +22,8 @@ export default class ResultsScreen extends Component {
   static navigationOptions = {
     title: 'Results',
   };
-    
+
 render() {
-    const { params } = this.props.navigation.state;
-    console.log('BLABLA ' + JSON.stringify(params.user))
     if (this.state.isLoading) {
       return (
         <View style={{flex: 1, paddingTop: 20}}>
@@ -34,43 +32,57 @@ render() {
       );
     }
 
+    if (this.state.name !== undefined) {
+        return (
+          <View>
+            <Text>{this.state.name}</Text>
+            <ListView
+              dataSource={this.state.reviews}
+              renderRow={(rowData) => <ResultEntry stars={rowData.stars} text={rowData.text}></ResultEntry>}
+            />
+          </View>
+        );
+    }
+    
     return (
-      <View>
-        <ListView
-          dataSource={this.state.dataSource}
-//          renderRow={(rowData) => <ResultEntry title={rowData.title} year={rowData.releaseYear}></ResultEntry>}
-          renderRow={(rowData) => <ResultEntry title={params.user.name} year={rowData.releaseYear}></ResultEntry>}
-        />
-      </View>
-    );
+        <View>
+            <Text> Didnt found any match for this phone number </Text>
+        </View>
+        
+        );
 }
 
-//componentDidMount() {
-//    return fetch('https://facebook.github.io/react-native/movies.json')
-//      .then((response) => response.json())
-//      .then((responseJson) => {
-//        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-//        this.setState({
-//          isLoading: false,
-//          dataSource: ds.cloneWithRows(responseJson.movies),
-//        }, function() {
-//          // do something with new state
-//        });
-//      })
-//      .catch((error) => {
-//        console.error(error);
-//      });
-//  }
 
     componentDidMount() {
-        let customData = require('./customData.json');
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.setState({
-          isLoading: false,
-          dataSource: ds.cloneWithRows(customData.movies),
-        }, function() {
-          // do something with new state
-        });
+        this.getProfessionalReviewsFromAPI();
     }
 
+    async getProfessionalReviewsFromAPI() {
+        const { params } = this.props.navigation.state;
+        try {
+          let response = await fetch(`https://intense-sierra-94321.herokuapp.com/professionals/get_professional_by_phone/${params.phone}`, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+            });
+          let responseJson = await response.json();
+          let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+            this.setState({
+            isLoading: false,
+            name: responseJson.name,
+              reviews: ds.cloneWithRows(responseJson.reviews),
+            }, function() {
+              // do something with new state
+            });
+        } catch(error) {
+            this.setState({
+            isLoading: false,
+            }, function() {
+              // do something with new state
+            });
+        }
+
+    }   
 }

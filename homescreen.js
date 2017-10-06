@@ -5,41 +5,77 @@
  */
 
 import React, { Component } from 'react';
-import { TouchableOpacity, AppRegistry, StyleSheet, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity, AppRegistry, StyleSheet, Text, TextInput, View} from 'react-native';
+import Modal from 'react-native-modal';
 
 export default class HomeScreen extends Component {
-  static navigationOptions = {
-    title: 'Home',
-    header: null,
-  };
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            modalVisible: false,
+        }   
+    }
+    
+    static navigationOptions = {
+        title: 'Home',
+        header: null,
+    };
+
+    toggleModal(visible) {
+        this.setState({ modalVisible: visible });
+    }
 
     render() {  
-      const { navigate } = this.props.navigation
-    const { params } = this.props.navigation.state
-    console.log('BLABLA ' + params.user)
-    return (
-      <View style={styles.container}>
-        <TextInput
-          style={{height: 40}}
-          placeholder="הכנס מספר טלפון של נותן השירות" 
-          onChangeText={(phoneNumber) => this.setState({phoneNumber})}
-        />
+        const { navigate } = this.props.navigation
+        const { params } = this.props.navigation.state
+        return (
+          <View style={styles.container}>
+            <TextInput
+              style={{height: 40}}
+              placeholder="הכנס מספר טלפון של נותן השירות" 
+              onChangeText={(phoneNumber) => this.setState({phoneNumber})}
+            />
 
-        <TouchableOpacity
-           style = {styles.submitButton}
-           onPress = {
-                () => navigate('Results', {user: params.user})
-           }>
-           <Text style = {styles.submitButtonText}> שלח </Text>
-        </TouchableOpacity>
-      </View>
-    );
+            <TouchableOpacity
+                style = {styles.button}
+               onPress = {
+                    () => navigate('Results', {phone: this.state.phoneNumber})
+               }>
+               <Text> שלח </Text>
+            </TouchableOpacity>
+
+            <Modal animationType = {"slide"} transparent = {true}
+               visible = {this.state.modalVisible}
+               onRequestClose = {() => { console.log("Modal has been closed.") } }>
+               <View style = {styles.modalContent}>
+                  <Text>Modal is open!</Text>
+                  
+                  <TouchableOpacity style = {styles.button} onPress = {() => {
+                     this.toggleModal(!this.state.modalVisible)}}>
+                     
+                     <Text>Close Modal</Text>
+                  </TouchableOpacity>
+               </View>
+            </Modal>
+
+            <TouchableOpacity
+               style = {styles.button}
+               onPress = {
+                    () => this.toggleModal(true)
+               }>
+               <Text> הכנס ביקורת </Text>
+            </TouchableOpacity>
+          </View>
+        );
     }
 }
 
 const styles = StyleSheet.create({
    container: {
-      paddingTop: 23
+          flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
    },
    input: {
       margin: 15,
@@ -47,13 +83,25 @@ const styles = StyleSheet.create({
       borderColor: '#7a42f4',
       borderWidth: 1
    },
-   submitButton: {
-      backgroundColor: '#7a42f4',
-      padding: 10,
-      margin: 15,
-      height: 40,
-   },
-   submitButtonText:{
-      color: 'white'
-   }
+   button: {
+    backgroundColor: 'lightblue',
+    padding: 12,
+    margin: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  bottomModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
 });
